@@ -1,25 +1,25 @@
 package com.mazecode.dao;
 
 import com.mazecode.model.User;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
-@Transactional
 @Repository
 public class UserDao implements IUserDao {
 	
 	@Autowired
-	private HibernateTemplate hibernateTemplate;
+	private SessionFactory sessionFactory;
 	
 	@SuppressWarnings("unchecked")
 	public List<User> all() {
-		String hql = "FROM User AS u ORDER BY u.id";
-		return ((List<User>) hibernateTemplate.find(hql));
+		String           hql   = "FROM User AS u ORDER BY u.id";
+		TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery(hql);
+		return query.getResultList();
 	}
 
 //	public User findById(int id) {

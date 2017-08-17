@@ -7,6 +7,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -20,13 +22,13 @@ import java.util.Locale;
 @Configuration
 @EnableWebMvc
 @Import(HibernateConfig.class)
-@ComponentScan(basePackages = "com.mazecode")
+@ComponentScan(basePackages = {"com.mazecode"})
 public class WebConfig extends WebMvcConfigurerAdapter {
-	
+
 	@Bean
 	public InternalResourceViewResolver viewResolver() {
 		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-		resolver.setPrefix("/WEB-INF/view/");
+		resolver.setPrefix("/WEB-INF/views/");
 		resolver.setSuffix(".jsp");
 		return resolver;
 	}
@@ -58,4 +60,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		registry.addResourceHandler("/app-resources/**").addResourceLocations("/resources/");
 	}
 	
+	@Override
+	public Validator getValidator() {
+		LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
+		validator.setValidationMessageSource(messageSource());
+		return validator;
+	}
+
 }
