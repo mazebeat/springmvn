@@ -7,6 +7,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.LocaleResolver;
@@ -17,6 +20,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import java.util.List;
 import java.util.Locale;
 
 @Configuration
@@ -24,7 +28,7 @@ import java.util.Locale;
 @Import(HibernateConfig.class)
 @ComponentScan(basePackages = {"com.mazecode"})
 public class WebConfig extends WebMvcConfigurerAdapter {
-
+	
 	@Bean
 	public InternalResourceViewResolver viewResolver() {
 		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
@@ -45,7 +49,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	public LocaleResolver localeResolver() {
 		CookieLocaleResolver resolver = new CookieLocaleResolver();
 		resolver.setDefaultLocale(new Locale("en"));
-		resolver.setCookieName("mazecookie");
+		resolver.setCookieName("mazecode-cookie");
 		resolver.setCookieMaxAge(4800);
 		return resolver;
 	}
@@ -66,5 +70,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		validator.setValidationMessageSource(messageSource());
 		return validator;
 	}
-
+	
+	@Override
+	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+		Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
+		builder.indentOutput(true);
+		converters.add(new MappingJackson2HttpMessageConverter(builder.build()));
+	}
 }

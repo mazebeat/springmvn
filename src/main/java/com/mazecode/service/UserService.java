@@ -1,7 +1,7 @@
 package com.mazecode.service;
 
-import com.mazecode.dao.IUserDao;
-import com.mazecode.model.User;
+import com.mazecode.dao.IUserDAO;
+import com.mazecode.model.MUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,22 +12,22 @@ import java.util.List;
 public class UserService implements IUserService {
 	
 	@Autowired
-	private IUserDao userDao;
+	private IUserDAO userDao;
 	
 	@Transactional(readOnly = true)
-	public List<User> all() {
+	public List<MUser> all() {
 		return userDao.all();
 	}
 
-//	public User findById(int id) {
+//	public MUser findById(int id) {
 //		return userDao.findById(id);
 //	}
 //	
-//	public synchronized void create(User user) {
+//	public synchronized void create(MUser user) {
 //		userDao.create(user);
 //	}
 //	
-//	public void update(User user) {
+//	public void update(MUser user) {
 //		userDao.update(user);
 //	}
 //	
